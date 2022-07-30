@@ -3,6 +3,8 @@ const app = express();
 const mongoose = require('mongoose');
 
 const stuffRoutes = require('./routes/stuff');
+const recipeRoutes = require('./routes/recipe');
+const userRoutes = require('./routes/user');
 
 mongoose.connect('mongodb+srv://sendylo:administrateur@cuisinecluster.xgazwg2.mongodb.net/?retryWrites=true&w=majority',{ useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
@@ -16,14 +18,14 @@ app.use((req,res,next) => {
     next();
 });
 
-// extraire le corps JSON //body perser
+// extraire le corps JSON //body parser
 app.use(express.json());
 
-stuffRouteBase = ""; 
-productRouteBase = "/api/products";
-
-// Pour cette route,on utilise le routeur exposé par stuffRoute
-app.use('/api/stuff',stuffRoutes);
+// On défini un routeur à chaque Base route
+app.use('/api/stuff', stuffRoutes);
+app.use('/api/v1/recipe', recipeRoutes);
+// Enregistrement des routes d'authentification
+app.use('/api/auth', userRoutes);
 
 
 module.exports = app;

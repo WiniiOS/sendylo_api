@@ -12,7 +12,7 @@ exports.createThing = (req, res, next) => {
   thing.save().then(
     () => {
       res.status(201).json({
-        message: 'Post saved successfully!'
+        message: 'Thing saved successfully!'
       });
     }
   ).catch(
