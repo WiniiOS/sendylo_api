@@ -1,0 +1,4 @@
+{
+    "MONGO_URI" : "mongodb+srv://sendylo:administrateur@cuisinecluster.xgazwg2.mongodb.net/?retryWrites=true&w=majority",
+    "PORT":3000
+}

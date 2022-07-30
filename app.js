@@ -1,12 +1,14 @@
-const express = require('express');
-const app = express();
 const mongoose = require('mongoose');
-
-const stuffRoutes = require('./routes/stuff');
 const recipeRoutes = require('./routes/recipe');
 const userRoutes = require('./routes/user');
+const config  = require('./config');
 
-mongoose.connect('mongodb+srv://sendylo:administrateur@cuisinecluster.xgazwg2.mongodb.net/?retryWrites=true&w=majority',{ useNewUrlParser: true, useUnifiedTopology: true })
+const express = require('express');
+const app = express();
+
+
+// Connexion à la base de données MongoDB
+mongoose.connect(config.MONGO_URI,{ useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
@@ -21,11 +23,10 @@ app.use((req,res,next) => {
 // extraire le corps JSON //body parser
 app.use(express.json());
 
-// On défini un routeur à chaque Base route
-app.use('/api/stuff', stuffRoutes);
+// On défini un routeur à chaque route de base
 app.use('/api/v1/recipe', recipeRoutes);
 // Enregistrement des routes d'authentification
-app.use('/api/auth', userRoutes);
+app.use('/api/v1/auth', userRoutes);
 
 
 module.exports = app;

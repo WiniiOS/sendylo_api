@@ -2,17 +2,21 @@ const Recipe = require('../models/Recipe');
 
 // externalisation de toutes nos routes dans le controlleur
 exports.createRecipe = (req, res, next) => {
+
+  const userId = req.auth.userId;
+
   const recipe = new Recipe({
     nom: req.body.nom,
     ingredients: req.body.ingredients,
     temps_cuisson: req.body.temps_cuisson,
     difficulte: req.body.difficulte,
-    auteur: req.body.auteur
+    auteur: userId
   });
   recipe.save().then(
     () => {
       res.status(201).json({
-        message: 'Recipe saved successfully!'
+        message: 'Recipe saved successfully!',
+        recette: recipe
       });
     }
   ).catch(
@@ -46,22 +50,39 @@ exports.modifyRecipe = (req, res, next) => {
     nom: req.body.nom,
     ingredients: req.body.ingredients,
     temps_cuisson: req.body.temps_cuisson,
-    difficulte: req.body.difficulte,
-    //auteur: req.body.auteur //non modifiable
+    difficulte: req.body.difficulte
   });
-  Recipe.updateOne({_id: req.params.recipeid}, recipe).then(
-    () => {
-      res.status(201).json({
-        message: 'Recipe updated successfully!'
-      });
+
+  const currentUser = req.auth.userId;
+  // On check si notre user est l'auteur de la recette.
+  Recipe.findOne({
+    _id: req.params.recipeid
+  })
+  .then(
+    (recipeBD) => {
+      if (recipeBD.auteur == currentUser ) {  
+        Recipe.updateOne({_id: req.params.recipeid}, recipe).then(
+          () => {
+            res.status(201).json({
+              message: 'Recipe updated successfully',
+              recipe:recipe
+            });
+          }
+        ).catch(
+          (error) => {
+            res.status(400).json({
+              error: error
+            });
+          }
+        );
+      }else{
+        res.status(401).json({
+          message: 'User unauthorized to update this recipe'
+        });
+      }
     }
-  ).catch(
-    (error) => {
-      res.status(400).json({
-        error: error
-      });
-    }
-  );
+  )
+
 };
 
 exports.deleteRecipe = (req, res, next) => {
