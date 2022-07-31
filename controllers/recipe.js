@@ -5,27 +5,36 @@ exports.createRecipe = (req, res, next) => {
 
   const userId = req.auth.userId;
 
-  const recipe = new Recipe({
-    nom: req.body.nom,
-    ingredients: req.body.ingredients,
-    temps_cuisson: req.body.temps_cuisson,
-    difficulte: req.body.difficulte,
-    auteur: userId
-  });
-  recipe.save().then(
-    () => {
-      res.status(201).json({
-        message: 'Recipe saved successfully!',
-        recette: recipe
-      });
-    }
-  ).catch(
-    (error) => {
-      res.status(400).json({
-        error: error
-      });
-    }
-  );
+  if (req.body.nom !== "") {
+    
+    const recipe = new Recipe({
+      nom: req.body.nom,
+      ingredients: req.body.ingredients,
+      temps_cuisson: req.body.temps_cuisson,
+      difficulte: req.body.difficulte,
+      auteur: userId
+    });
+    recipe.save().then(
+      () => {
+        res.status(201).json({
+          message: 'Recipe saved successfully!',
+          recette: recipe
+        });
+      }
+    ).catch(
+      (error) => {
+        res.status(400).json({
+          error: error
+        });
+      }
+    );
+
+  }else{
+    res.status(401).json({
+      message: "The path 'nom' can't be empty"
+    });
+  }
+  
 };
 
 exports.getOneRecipe = (req, res, next) => {
@@ -86,23 +95,40 @@ exports.modifyRecipe = (req, res, next) => {
 };
 
 exports.deleteRecipe = (req, res, next) => {
-    Recipe.deleteOne({_id: req.params.recipeid}).then(
-    () => {
-      res.status(200).json({
-        message: 'Deleted!'
-      });
+
+  const currentUser = req.auth.userId;
+  // On check si notre user est l'auteur de la recette.
+  Recipe.findOne({
+    _id: req.params.recipeid
+  })
+  .then(
+    (recipeBD) => {
+      if (recipeBD.auteur == currentUser ) {  
+        Recipe.deleteOne({_id: req.params.recipeid}).then(
+          () => {
+            res.status(200).json({
+              message: 'Deleted!'
+            });
+          }
+        ).catch(
+          (error) => {
+            res.status(400).json({
+              error: error
+            });
+          }
+        );
+      }else{
+        res.status(401).json({
+          message: 'User unauthorized to delete this recipe'
+        });
+      }
     }
-  ).catch(
-    (error) => {
-      res.status(400).json({
-        error: error
-      });
-    }
-  );
+  )
+
 };
 
 exports.getAllRecipes = (req, res, next) => {
-  Recipe.find().then(
+  Recipe.find().limit(parseInt(req.query.qte)).then(
     (recipes) => {
       res.status(200).json(recipes);
     }
