@@ -11,3 +11,7 @@ API De gestion des recettes de cuisine avec un systeme d'authentification par to
 
 
 ### `npm test`
+
+## API Documentation/ Swagger
+
+### http://localhost:3000/api/v1/api-docs/

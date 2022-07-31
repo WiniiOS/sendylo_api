@@ -1,0 +1,216 @@
+{
+    "definitions": {},
+    "info": {
+      "title": "API Sendylo Documentation",
+      "version": "1.0.0",
+      "license": {
+        "name": "ISC"
+      },
+      "description": "API REST pour la gestion des recettes de cuisine.\n\nAPI MongoDB(Mongoose),Express JS, Node JS, Authentification & token JWT"
+    },
+    "basePath":"/api/v1",
+    "host":"localhost:3000",
+    "tags" :[
+      {
+        "name": "recipes",
+        "description" :"Methodes permettant de gerer les recettes"
+      },
+      {
+        "name": "authentification",
+        "description" :"Methodes d'authentification des utilisateurs"
+      }
+    ],
+    "paths": {
+      "recipe/get": {
+        "get": {
+          "summary": "recipe/get",
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [],
+          "responses": {
+            "401": {
+              "description": "Unauthorized",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "object",
+                    "properties": {}
+                  }
+                }
+              }
+            }
+          },
+          "tags": ["recipes"],
+          "produces": [
+            "application/json"
+          ]
+        }
+      },
+      "recipe/create": {
+        "post": {
+          "summary": "recipe/create",
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name":"nom",
+              "in":"body",
+              "required":true
+            },
+            {
+              "name":"ingredients",
+              "in":"body",
+              "required":true
+            },
+            {
+              "name":"temps_cuisson",
+              "in":"body",
+              "required":true
+            },
+            {
+              "name":"difficulte",
+              "in":"body",
+              "required":true
+            }
+          ],
+          "responses": {},
+          "tags": ["recipes"]
+        }
+      },
+      "recipe/{recipeid}": {
+        "get": {
+          "summary": "recipe/{recipeid}",
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "recipeid",
+              "in": "path",
+              "required": true
+            }
+          ],
+          "responses": {},
+          "tags": ["recipes"]
+        }
+      },
+      "recipe/update/{recipeid}": {
+        "put": {
+          "summary": "recipe/update/{recipeid}",
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "recipeid",
+              "in": "path",
+              "required": true
+            },
+            {
+              "name":"nom",
+              "in":"body",
+              "required":false
+            },
+            {
+              "name":"ingredients",
+              "in":"body",
+              "required":false
+            },
+            {
+              "name":"temps_cuisson",
+              "in":"body",
+              "required":false
+            },
+            {
+              "name":"difficulte",
+              "in":"body",
+              "required":false
+            }
+          ],
+          "responses": {},
+          "tags": ["recipes"]
+        }
+      },
+      "recipe/delete/{recipeid}": {
+        "delete": {
+          "summary": "recipe/delete/{recipeid}",
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "recipeid",
+              "in": "path",
+              "required": true
+            }
+          ],
+          "responses": {},
+          "tags": ["recipes"]
+        }
+      },
+      "auth/register": {
+        "post": {
+          "summary": "auth/register",
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name":"email",
+              "in":"body",
+              "required":true
+            },
+            {
+              "name":"password",
+              "in":"body",
+              "required":true
+            }
+          ],
+          "responses": {},
+          "tags": ["authentification"]
+        }
+      },
+      "auth/login": {
+        "post": {
+          "summary": "auth/login",
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name":"email",
+              "in":"body",
+              "required":true
+            },
+            {
+              "name":"password",
+              "in":"body",
+              "required":true
+            }
+          ],
+          "responses": {
+            "401": {
+              "description": "Unauthorized",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "example": "Paire login/mot de passe incorrecte"
+                  }
+                }
+              }
+            }
+          },
+          "tags": ["authentification"],
+          "produces": [
+            "application/json"
+          ]
+        }
+      }
+    },
+    "swagger": "2.0"
+  }

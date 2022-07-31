@@ -2,10 +2,11 @@ const mongoose = require('mongoose');
 const recipeRoutes = require('./routes/recipe');
 const userRoutes = require('./routes/user');
 const config  = require('./config');
-
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./assets/swagger.json');
 const express = require('express');
-const app = express();
 
+const app = express();
 
 // Connexion à la base de données MongoDB
 mongoose.connect(config.MONGO_URI,{ useNewUrlParser: true, useUnifiedTopology: true })
@@ -19,6 +20,9 @@ app.use((req,res,next) => {
     res.setHeader('Access-Control-Allow-Methods','GET,POST,PUT,DELETE,PATCH,OPTIONS');
     next();
 });
+
+// Swagger de documentation API
+app.use('/api/v1/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // extraire le corps JSON //body parser
 app.use(express.json());
