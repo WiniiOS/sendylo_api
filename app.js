@@ -5,6 +5,7 @@ const config  = require('./config');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./assets/swagger.json');
 const express = require('express');
+const path = require('path');
 
 const app = express();
 
@@ -20,6 +21,9 @@ app.use((req,res,next) => {
     res.setHeader('Access-Control-Allow-Methods','GET,POST,PUT,DELETE,PATCH,OPTIONS');
     next();
 });
+
+// On rend statique notre dossier images
+app.use('/images',express.static(path.join(__dirname,'images')));
 
 // Swagger de documentation API
 app.use('/api/v1/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
