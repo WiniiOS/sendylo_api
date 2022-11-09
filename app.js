@@ -31,9 +31,9 @@ app.use('/api/v1/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 // extraire le corps JSON //body parser
 app.use(express.json());
 
-// On défini un routeur à chaque route de base
+// Define rooter at each base root
 app.use('/api/v1/recipe', recipeRoutes);
-// Enregistrement des routes d'authentification
+// save authentication roots
 app.use('/api/v1/auth', userRoutes);
 
 

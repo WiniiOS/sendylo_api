@@ -42,7 +42,7 @@ const errorHandler = error => {
 const server = http.createServer(app);
 
 server.on('error',errorHandler)
-// event listenner on server port
+// event listener on server port
 server.on('listening',() => {
     const address = server.address();
     const bind = typeof address === 'string' ? 'pipe' + address : 'port ' + port;
